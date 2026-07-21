@@ -49,7 +49,7 @@ export default function RootLayout({
       lang="en"
       className={`${playfair.variable} ${inter.variable} ${poppins.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-backgroundCustom dark:bg-primary">
+      <body className="min-h-full flex flex-col bg-backgroundCustom">
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

@@ -127,7 +127,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
             initial={{ opacity: 0, filter: "blur(10px)" }}
             animate={{ opacity: 1, filter: "blur(0px)" }}
             transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] }}
-            className="flex flex-col min-h-screen relative bg-backgroundCustom dark:bg-primary text-textCustom dark:text-lightMint transition-colors duration-500 overflow-x-hidden"
+            className="flex flex-col min-h-screen relative bg-backgroundCustom text-textCustom transition-colors duration-500 overflow-x-hidden"
           >
             {/* Global floating leaves/particles */}
             <LeafParticles />
