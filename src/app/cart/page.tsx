@@ -44,7 +44,7 @@ export default function CartPage() {
 
   return (
     <div className="pt-28 pb-20 min-h-screen">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <h1 className="text-3xl md:text-5xl font-playfair font-bold text-primary dark:text-white mb-10">
           Your Beauty Bag
         </h1>
@@ -74,7 +74,7 @@ export default function CartPage() {
               {cart.map((item) => (
                 <div
                   key={item.product.id}
-                  className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-6 bg-white/40 dark:bg-white/5 border border-black/5 dark:border-white/5 rounded-2xl gap-6 shadow-sm hover:shadow transition-shadow"
+                  className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 bg-white/40 dark:bg-white/5 border border-black/5 dark:border-white/5 rounded-2xl gap-6 shadow-sm hover:shadow transition-shadow"
                 >
                   {/* Photo & Titles */}
                   <div className="flex items-center space-x-4">
@@ -136,7 +136,7 @@ export default function CartPage() {
 
             {/* Calculations Panel */}
             <div className="lg:col-span-4 space-y-6">
-              <div className="bg-white/40 dark:bg-white/5 border border-black/5 dark:border-white/5 p-8 rounded-3xl space-y-6 shadow-sm">
+              <div className="bg-white/40 dark:bg-white/5 border border-black/5 dark:border-white/5 p-4 sm:p-8 rounded-2xl sm:rounded-3xl space-y-6 shadow-sm">
                 <h3 className="font-playfair text-xl font-bold text-primary dark:text-white border-b border-black/5 dark:border-white/5 pb-4">
                   Summary Breakdown
                 </h3>

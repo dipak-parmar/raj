@@ -251,7 +251,7 @@ export default function CheckoutPage() {
 
   return (
     <div className="pt-28 pb-20 min-h-screen">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
         
         {/* Back navigation */}
         <Link
@@ -262,28 +262,28 @@ export default function CheckoutPage() {
           <span>Back to bag</span>
         </Link>
 
-        <h1 className="text-3xl md:text-5xl font-playfair font-bold text-primary dark:text-white mb-10">
+        <h1 className="text-3xl md:text-5xl font-playfair font-bold text-primary dark:text-white mb-6 sm:mb-10">
           Secure Checkout
         </h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           
           {/* Customer Details Form */}
-          <div className="lg:col-span-7 bg-white/40 dark:bg-white/5 border border-black/5 dark:border-white/5 p-8 rounded-3xl space-y-6">
+          <div className="lg:col-span-7 bg-white/40 dark:bg-white/5 border border-black/5 dark:border-white/5 p-4 sm:p-8 rounded-2xl sm:rounded-3xl space-y-6">
             {!user ? (
-              <div className="p-4 bg-primary/5 border border-primary/10 rounded-2xl text-[11px] font-inter text-textCustom/75 flex justify-between items-center gap-3">
+              <div className="p-4 bg-primary/5 border border-primary/10 rounded-2xl text-[11px] font-inter text-textCustom/75 flex flex-col sm:flex-row justify-between sm:items-center gap-3">
                 <span>Already have an account? Login to save purchase history and track items.</span>
-                <Link href="/orders" className="text-primary font-bold hover:underline shrink-0 text-xs">
+                <Link href="/orders" className="text-primary font-bold hover:underline shrink-0 text-xs text-left sm:text-right">
                   Log In &rarr;
                 </Link>
               </div>
             ) : (
-              <div className="p-4 bg-green-500/5 border border-green-500/10 rounded-2xl text-[11px] font-inter text-green-700/80 flex items-center justify-between gap-3">
+              <div className="p-4 bg-green-500/5 border border-green-500/10 rounded-2xl text-[11px] font-inter text-green-700/80 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
                 <span>Logged in as <strong>{user.name}</strong>. Shipping contact pre-filled!</span>
                 <button 
                   type="button" 
                   onClick={() => router.push("/orders")} 
-                  className="text-green-700 font-bold hover:underline text-xs shrink-0 cursor-pointer"
+                  className="text-green-700 font-bold hover:underline text-xs shrink-0 cursor-pointer text-left sm:text-right"
                 >
                   My Orders &rarr;
                 </button>
@@ -370,7 +370,7 @@ export default function CheckoutPage() {
                 )}
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                 <div className="space-y-1.5">
                   <label htmlFor="city-input" className="text-[10px] font-poppins font-bold uppercase tracking-wider text-textCustom/60 dark:text-lightMint/60">
                     City *
@@ -429,16 +429,16 @@ export default function CheckoutPage() {
 
               {/* Calculated Distance (Simulated via PIN/City) */}
               <div className="space-y-1.5 pt-2">
-                <div className="text-[10px] font-poppins font-bold uppercase tracking-wider text-textCustom/60 dark:text-lightMint/60 flex items-center justify-between">
+                <div className="text-[10px] font-poppins font-bold uppercase tracking-wider text-textCustom/60 dark:text-lightMint/60 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
                   <span>Shipping Distance</span>
                   <span className="text-secondary dark:text-accent lowercase font-medium">Automatic Calculation</span>
                 </div>
                 
-                <div className="w-full px-4 py-3 bg-white/50 dark:bg-black/20 border border-black/10 dark:border-white/10 text-sm rounded-xl flex items-center justify-between">
-                  <span className="text-textCustom/50 dark:text-lightMint/50 font-inter text-xs">
+                <div className="w-full px-4 py-3 bg-white/50 dark:bg-black/20 border border-black/10 dark:border-white/10 text-sm rounded-xl flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-between">
+                  <span className="text-textCustom/50 dark:text-lightMint/50 font-inter text-xs leading-normal">
                     {distance === "" ? "Awaiting City or PIN Code..." : `Distance from Chandkheda Depot:`}
                   </span>
-                  <span className="font-poppins font-bold text-primary dark:text-accent">
+                  <span className="font-poppins font-bold text-primary dark:text-accent shrink-0 text-sm">
                     {distance === "" ? "—" : `${distance} km`}
                   </span>
                 </div>
@@ -466,7 +466,7 @@ export default function CheckoutPage() {
                   Payment Destination
                 </h3>
                 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <button
                     type="button"
                     disabled={distance !== "" && Number(distance) > 20}
@@ -532,7 +532,7 @@ export default function CheckoutPage() {
           <div className="lg:col-span-5 space-y-6">
             {/* Dynamic UPI QR Panel */}
             {paymentMethod === "upi" && (
-              <div className="bg-white/40 dark:bg-white/5 border border-black/5 dark:border-white/5 p-8 rounded-3xl space-y-6 text-center shadow-sm select-none">
+              <div className="bg-white/40 dark:bg-white/5 border border-black/5 dark:border-white/5 p-4 sm:p-8 rounded-2xl sm:rounded-3xl space-y-6 text-center shadow-sm select-none">
                 <div className="space-y-2">
                   <h3 className="font-playfair text-xl font-bold text-primary dark:text-white">
                     Dynamic UPI QR Code
@@ -606,15 +606,15 @@ export default function CheckoutPage() {
             )}
 
             {/* Billing totals snapshot card */}
-            <div className="bg-white/40 dark:bg-white/5 border border-black/5 dark:border-white/5 p-6 rounded-3xl space-y-4 shadow-sm select-none">
+            <div className="bg-white/40 dark:bg-white/5 border border-black/5 dark:border-white/5 p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-4 shadow-sm select-none">
               <h4 className="font-playfair text-lg font-bold text-textCustom dark:text-white">
                 Purchase Order
               </h4>
               <div className="divide-y divide-black/5 dark:divide-white/5 max-h-36 overflow-y-auto space-y-2.5 pr-1">
                 {cart.map((item) => (
-                  <div key={item.product.id} className="flex justify-between text-xs font-inter text-textCustom/75 dark:text-lightMint/75 pt-2">
-                    <span className="truncate max-w-[200px]">{item.product.name} (x{item.quantity})</span>
-                    <span className="font-poppins font-semibold">₹{item.product.offerPrice * item.quantity}</span>
+                  <div key={item.product.id} className="flex items-center justify-between text-xs font-inter text-textCustom/75 dark:text-lightMint/75 pt-2">
+                    <span className="truncate flex-1 min-w-0 mr-4 text-left">{item.product.name} (x{item.quantity})</span>
+                    <span className="font-poppins font-semibold shrink-0">₹{item.product.offerPrice * item.quantity}</span>
                   </div>
                 ))}
               </div>

@@ -123,7 +123,7 @@ export default function MyOrdersPage() {
 
   return (
     <div className="pt-32 pb-20 min-h-screen bg-gray-50/50">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
         
         {/* Route trace navigation */}
         <div className="flex items-center space-x-2 text-xs font-poppins text-textCustom/50 mb-6">
@@ -134,7 +134,7 @@ export default function MyOrdersPage() {
 
         {/* Not Logged In Scene */}
         {!user ? (
-          <div className="max-w-md mx-auto bg-white border border-black/5 p-8 rounded-3xl shadow-xl space-y-6">
+          <div className="max-w-md mx-auto bg-white border border-black/5 p-4 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl space-y-6">
             <div className="text-center space-y-2">
               <div className="w-12 h-12 bg-primary/5 text-primary rounded-2xl mx-auto flex items-center justify-center">
                 <Lock className="w-6 h-6" />
@@ -219,7 +219,7 @@ export default function MyOrdersPage() {
           <div className="space-y-8 animate-fadeIn">
             
             {/* Header info bar */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-black/5 p-6 rounded-3xl shadow-sm gap-4">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-black/5 p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-sm gap-4">
               <div className="space-y-1">
                 <div className="flex items-center space-x-2">
                   <span className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse" />
@@ -263,7 +263,7 @@ export default function MyOrdersPage() {
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 
                 {/* Left Side: orders search & history list */}
-                <div className="lg:col-span-5 bg-white border border-black/5 p-6 rounded-3xl space-y-6 shadow-sm">
+                <div className="lg:col-span-5 bg-white border border-black/5 p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-6 shadow-sm">
                   <div className="flex items-center justify-between border-b border-black/5 pb-4">
                     <span className="font-playfair text-base font-bold text-primary flex items-center space-x-1.5">
                       <ShoppingBag className="w-4 h-4 text-accent" />
@@ -317,7 +317,7 @@ export default function MyOrdersPage() {
                 {/* Right Side: selected order details screen */}
                 <div className="lg:col-span-7">
                   {selectedOrder ? (
-                    <div className="bg-white border border-black/5 p-6 md:p-8 rounded-3xl space-y-6 shadow-sm">
+                    <div className="bg-white border border-black/5 p-4 sm:p-8 rounded-2xl sm:rounded-3xl space-y-6 shadow-sm">
                       <div className="border-b border-black/5 pb-4 flex justify-between items-center">
                         <span className="font-poppins text-xs font-bold uppercase tracking-wider text-textCustom/40">
                           Invoice ID: {selectedOrder.orderId}
