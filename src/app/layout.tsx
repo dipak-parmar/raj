@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   keywords: "Raj Marketing, cosmetics, organic skincare, natural beauty, luxury cosmetics, premium moisturizer, hydrating serum, clay mask",
   authors: [{ name: "Raj Marketing Team" }],
   icons: {
-    icon: "/images/owner/owenr1.png",
+    icon: "/images/about/about-1.png",
   },
   openGraph: {
     title: "RAJ MARKETING | Premium Organic Luxury Skincare",
