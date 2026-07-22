@@ -244,8 +244,8 @@ export default function CheckoutPage() {
     if (paymentMethod === "cod") {
       executeSuccessSimulation();
     } else {
-      // For UPI QR, the merchant displays QR for customer to scan.
-      // We wait for simulation check.
+      // Verify UPI Payment
+      executeSuccessSimulation();
     }
   };
 
@@ -515,16 +515,19 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              {/* Order Submission for COD */}
-              {paymentMethod === "cod" && (
-                <button
-                  type="submit"
-                  disabled={paymentProcessing}
-                  className="w-full mt-6 py-4 bg-primary dark:bg-accent text-white dark:text-primary font-poppins text-xs font-bold uppercase tracking-widest rounded-xl transition-all duration-300 hover:opacity-90 disabled:opacity-50 cursor-pointer shadow-lg"
-                >
-                  {paymentProcessing ? "Processing Order..." : `Submit Order (COD - ₹${grandTotalWithShipping})`}
-                </button>
-              )}
+              {/* Order Submission */}
+              <button
+                type="submit"
+                disabled={paymentProcessing}
+                className="w-full mt-6 py-4 bg-primary dark:bg-accent text-white dark:text-primary font-poppins text-xs font-bold uppercase tracking-widest rounded-xl transition-all duration-300 hover:opacity-90 disabled:opacity-50 cursor-pointer shadow-lg"
+              >
+                {paymentProcessing 
+                  ? "Processing Order..." 
+                  : paymentMethod === "cod" 
+                    ? `Submit Order (COD - ₹${grandTotalWithShipping})` 
+                    : `Verify UPI Payment (₹${grandTotalWithShipping})`
+                }
+              </button>
             </form>
           </div>
 
