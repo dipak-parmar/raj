@@ -33,7 +33,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       <div className="relative flex items-center justify-center space-x-2 md:space-x-4 max-w-4xl px-6">
         
         {/* Translating "RAJ" part */}
-        <div className="w-[100px] md:w-[185px] h-[50px] md:h-[80px] relative flex items-center justify-center overflow-hidden">
+        <div className="w-[80px] md:w-[185px] h-[40px] md:h-[80px] relative flex items-center justify-center overflow-hidden">
           <AnimatePresence mode="wait">
             <motion.span
               key={transIdx}
@@ -41,7 +41,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -25, opacity: 0 }}
               transition={{ duration: 0.22, ease: "easeOut" }}
-              className="absolute text-4xl md:text-7xl font-playfair font-black text-accent tracking-wide whitespace-nowrap select-none"
+              className="absolute text-3xl md:text-7xl font-playfair font-black text-accent tracking-wide whitespace-nowrap select-none"
             >
               {translations[transIdx]}
             </motion.span>
@@ -49,7 +49,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         </div>
 
         {/* Static "MARKETING" part */}
-        <span className="text-4xl md:text-7xl font-playfair font-bold text-white tracking-widest select-none">
+        <span className="text-3xl md:text-7xl font-playfair font-bold text-white tracking-widest select-none">
           MARKETING
         </span>
         
