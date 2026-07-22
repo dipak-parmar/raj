@@ -32,7 +32,7 @@ export const products: Product[] = [
     tagline: "Nature Powered Hair Strength",
     description: "A premium, nature-infused restorative cleanser formulated with wild herbs and botanical pearls. It gently purifies the scalp, rebuilds compromised hair bonds, and revitalizes follicles for resilient, silky, and voluminous hair.",
     originalPrice: 299,
-    offerPrice: 199,
+    offerPrice: 149,
     rating: 4.8,
     reviewsCount: 142,
     imgUrl: "/images/shop/product-1.png",
@@ -111,9 +111,9 @@ export const products: Product[] = [
     offerPrice: 399,
     rating: 4.8,
     reviewsCount: 188,
-    imgUrl: "/images/shop/product-5.png",
+    imgUrl: "/images/shop/prodcu-4.png",
     gallery: [
-      "/images/shop/product-5.png"
+      "/images/shop/prodcu-4.png"
     ],
     organic: true,
     benefits: [
@@ -149,9 +149,9 @@ export const products: Product[] = [
     offerPrice: 399,
     rating: 4.7,
     reviewsCount: 164,
-    imgUrl: "/images/shop/prodcu-4.png",
+    imgUrl: "/images/shop/product-5.png",
     gallery: [
-      "/images/shop/prodcu-4.png"
+      "/images/shop/product-5.png"
     ],
     organic: true,
     benefits: [
@@ -222,7 +222,7 @@ export const products: Product[] = [
     tagline: "Best Natural and Herbal Toothpaste 150gm",
     description: "A premium fluoridated herbal toothpaste featuring the powerful antibacterial property of organic Noni fruit, mint, and active botanicals. It fights plaque, prevents cavities, strengthens gums, and delivers a burst of long-lasting icy freshness.",
     originalPrice: 299,
-    offerPrice: 199,
+    offerPrice: 99,
     rating: 4.8,
     reviewsCount: 95,
     imgUrl: "/images/shop/product-6.png",

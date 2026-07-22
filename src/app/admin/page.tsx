@@ -40,7 +40,7 @@ export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [passError, setPassError] = useState("");
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);  
   const [inquiries, setInquiries] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<"orders" | "inquiries">("orders");
   const [searchQuery, setSearchQuery] = useState("");
