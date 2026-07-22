@@ -68,15 +68,11 @@ export default function Navbar() {
           {/* Logo */}
           <motion.div layout="position" className="shrink-0 flex items-center">
             <Link href="/" className="whitespace-nowrap shrink-0 block">
-              <span
-                className={`text-xs xs:text-sm sm:text-base md:text-xl font-playfair font-bold tracking-wider xs:tracking-widest whitespace-nowrap select-none transition-colors duration-300 ${
-                  isScrolled
-                    ? "text-primary"
-                    : "text-white"
-                }`}
-              >
-                RAJ MARKETING
-              </span>
+              <img
+                src="/images/about/about-1.png"
+                alt="RAJ MARKETING"
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-white/30 hover:border-white/50 transition-colors"
+              />
             </Link>
           </motion.div>
 
