@@ -22,7 +22,7 @@ export default function ReturnPolicyPage() {
           2. Damaged Packages
         </h2>
         <p>
-          In the rare event that a glass bottle arrives fractured or spills during shipment, take a picture of the unopened package and send it to our desk via <a href="mailto:info@rajmarketing.com" className="underline font-semibold">info@rajmarketing.com</a>. We will dispatch a new bottle immediately.
+          In the rare event that a glass bottle arrives fractured or spills during shipment, take a picture of the unopened package and send it to our desk via <a href="mailto:dipakparmar2466@gmail.com" className="underline font-semibold">dipakparmar2466@gmail.com</a>. We will dispatch a new bottle immediately.
         </p>
       </section>
 

@@ -648,7 +648,7 @@ export default function AdminDashboard() {
             {/* Email UI Box mockup */}
             <div className="bg-gray-100 dark:bg-black/30 p-5 rounded-2xl border border-black/[0.03] space-y-3 font-mono text-[11px] text-textCustom dark:text-white leading-relaxed">
               <div>
-                <span className="text-[10px] text-textCustom/40 uppercase">From:</span> dispatch@rajmarketing.com
+                <span className="text-[10px] text-textCustom/40 uppercase">From:</span> dipakparmar2466@gmail.com
               </div>
               <div>
                 <span className="text-[10px] text-textCustom/40 uppercase">To:</span> {emailModalOrder.email}
