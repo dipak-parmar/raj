@@ -16,19 +16,19 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const [loading, setLoading] = useState(true);
   const [isOffline, setIsOffline] = useState(false);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setIsOffline(!window.navigator.onLine);
-      const handleOnline = () => setIsOffline(false);
-      const handleOffline = () => setIsOffline(true);
-      window.addEventListener("online", handleOnline);
-      window.addEventListener("offline", handleOffline);
-      return () => {
-        window.removeEventListener("online", handleOnline);
-        window.removeEventListener("offline", handleOffline);
-      };
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     setIsOffline(!window.navigator.onLine);
+  //     const handleOnline = () => setIsOffline(false);
+  //     const handleOffline = () => setIsOffline(true);
+  //     window.addEventListener("online", handleOnline);
+  //     window.addEventListener("offline", handleOffline);
+  //     return () => {
+  //       window.removeEventListener("online", handleOnline);
+  //       window.removeEventListener("offline", handleOffline);
+  //     };
+  //   }
+  // }, []);
 
   return (
     <AppProvider>

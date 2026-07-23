@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import confetti from "canvas-confetti";
 
-interface ReceiptItem {
+interface ReceiptItem { 
   id: string | number;
   name: string;
   quantity: number;
@@ -65,7 +65,7 @@ export default function AdminDashboard() {
       } catch (err) {
         console.error(err);
       }
-    }
+    } 
   }, [isAuthenticated, activeTab]);
 
     const handleLogin = (e: React.FormEvent) => {
