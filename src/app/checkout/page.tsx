@@ -3,7 +3,7 @@
 import { useApp } from "../../context/AppContext";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, CheckCircle2, AlertTriangle, QrCode } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import confetti from "canvas-confetti";
 
@@ -37,7 +37,7 @@ export default function CheckoutPage() {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   // Payment States
-  const [paymentMethod, setPaymentMethod] = useState<"cod" | "upi">("cod");
+  const [paymentMethod, setPaymentMethod] = useState<"cod">("cod");
   const [paymentStatus, setPaymentStatus] = useState<"pending" | "success" | "failed">("pending");
   const [paymentProcessing, setPaymentProcessing] = useState(false);
 
@@ -128,20 +128,7 @@ export default function CheckoutPage() {
   const deliveryCharge = getDeliveryCharge();
   const grandTotalWithShipping = orderTotal + deliveryCharge;
 
-  // Auto-switch payment destination if distance > 20 km (COD only available under 20 km)
-  useEffect(() => {
-    if (distance !== "" && Number(distance) > 20) {
-      setPaymentMethod("upi");
-    }
-  }, [distance]);
-
-  // UPI Link generation
-  const upiId = "9510583980@slc";
-  const payeeName = "RAJ MARKETING";
-  const upiDeepLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${grandTotalWithShipping}&cu=INR&tn=${encodeURIComponent(`Order ${orderId}`)}`;
-  
-  // Public QR generating API
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=10&data=${encodeURIComponent(upiDeepLink)}`;
+  // (Only COD) — online payment options removed
 
   const validateForm = () => {
     const errors: Record<string, string> = {};
@@ -229,24 +216,12 @@ export default function CheckoutPage() {
     }, 1500);
   };
 
-  const executeFailureSimulation = () => {
-    setPaymentProcessing(true);
-    setTimeout(() => {
-      setPaymentProcessing(false);
-      setPaymentStatus("failed");
-    }, 1500);
-  };
+  // Removed online failure simulation (no online payments)
 
   const handleSubmitOrder = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
-
-    if (paymentMethod === "cod") {
-      executeSuccessSimulation();
-    } else {
-      // Verify UPI Payment
-      executeSuccessSimulation();
-    }
+    executeSuccessSimulation();
   };
 
   return (
@@ -466,7 +441,7 @@ export default function CheckoutPage() {
                   Payment Destination
                 </h3>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
                   <button
                     type="button"
                     disabled={distance !== "" && Number(distance) > 20}
@@ -491,27 +466,6 @@ export default function CheckoutPage() {
                         : "Pay at your doorstep after parcel delivery."}
                     </span>
                   </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setPaymentMethod("upi");
-                      setPaymentStatus("pending");
-                    }}
-                    className={`p-4 rounded-2xl border text-left flex flex-col space-y-2 cursor-pointer transition-all duration-300 ${
-                      paymentMethod === "upi"
-                        ? "border-primary dark:border-accent bg-primary/5 dark:bg-accent/15"
-                        : "border-black/5 dark:border-white/10 bg-transparent hover:border-black/10 hover:dark:border-white/20"
-                    }`}
-                  >
-                    <span className="font-poppins text-xs font-bold uppercase text-primary dark:text-accent flex items-center space-x-1.5">
-                      <QrCode className="w-4 h-4 shrink-0" />
-                      <span>Instant UPI QR</span>
-                    </span>
-                    <span className="text-[10px] text-textCustom/50 dark:text-lightMint/50 font-inter">
-                      Scan dynamic amount QR code on screen.
-                    </span>
-                  </button>
                 </div>
               </div>
 
@@ -521,92 +475,14 @@ export default function CheckoutPage() {
                 disabled={paymentProcessing}
                 className="w-full mt-6 py-4 bg-primary dark:bg-accent text-white dark:text-primary font-poppins text-xs font-bold uppercase tracking-widest rounded-xl transition-all duration-300 hover:opacity-90 disabled:opacity-50 cursor-pointer shadow-lg"
               >
-                {paymentProcessing 
-                  ? "Processing Order..." 
-                  : paymentMethod === "cod" 
-                    ? `Submit Order (COD - ₹${grandTotalWithShipping})` 
-                    : `Verify UPI Payment (₹${grandTotalWithShipping})`
-                }
+                {paymentProcessing ? "Processing Order..." : `Submit Order (COD - ₹${grandTotalWithShipping})`}
               </button>
             </form>
           </div>
 
           {/* Checkout Right Side: QR generation visual or checkout summary */}
           <div className="lg:col-span-5 space-y-6">
-            {/* Dynamic UPI QR Panel */}
-            {paymentMethod === "upi" && (
-              <div className="bg-white/40 dark:bg-white/5 border border-black/5 dark:border-white/5 p-4 sm:p-8 rounded-2xl sm:rounded-3xl space-y-6 text-center shadow-sm select-none">
-                <div className="space-y-2">
-                  <h3 className="font-playfair text-xl font-bold text-primary dark:text-white">
-                    Dynamic UPI QR Code
-                  </h3>
-                  <p className="text-xs text-textCustom/60 dark:text-lightMint/60 font-inter leading-relaxed max-w-xs mx-auto">
-                    Scan with any UPI app (GPay, PhonePe, Paytm, BHIM). The exact amount has been packed inside.
-                  </p>
-                </div>
-
-                {/* Live QR Image */}
-                <div className="relative w-52 h-52 mx-auto bg-white p-3 rounded-2xl border border-black/5 shadow-inner flex items-center justify-center">
-                  <img
-                    src={qrCodeUrl}
-                    alt="UPI request payment QR code"
-                    className="w-full h-full object-contain"
-                  />
-                  {paymentProcessing && (
-                    <div className="absolute inset-0 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xs flex items-center justify-center">
-                      <div className="w-8 h-8 border-2 border-primary dark:border-accent border-t-transparent rounded-full animate-spin" />
-                    </div>
-                  )}
-                </div>
-
-                <div className="space-y-1">
-                  <p className="font-inter text-xs text-textCustom/50 dark:text-lightMint/50">Requested Amount:</p>
-                  <p className="font-poppins text-2xl font-bold text-primary dark:text-accent">
-                    ₹{grandTotalWithShipping}
-                  </p>
-                </div>
-
-                {/* Simulated Payment actions */}
-                <div className="space-y-3 pt-4 border-t border-black/5 dark:border-white/5 max-w-xs mx-auto">
-                  <button
-                    onClick={() => {
-                      if (!validateForm()) return;
-                      executeSuccessSimulation();
-                    }}
-                    disabled={paymentProcessing}
-                    className="w-full py-3 bg-secondary/15 dark:bg-accent/20 border border-secondary/20 dark:border-accent/20 text-secondary dark:text-accent font-poppins text-[10px] font-bold uppercase tracking-wider rounded-xl hover:opacity-90 disabled:opacity-50 transition-opacity cursor-pointer flex items-center justify-center space-x-1.5"
-                  >
-                    <CheckCircle2 className="w-4 h-4" />
-                    <span>Simulate Payment Success</span>
-                  </button>
-                  
-                  <button
-                    onClick={() => {
-                      if (!validateForm()) return;
-                      executeFailureSimulation();
-                    }}
-                    disabled={paymentProcessing}
-                    className="w-full py-3 bg-red-500/10 border border-red-500/20 text-red-500 font-poppins text-[10px] font-bold uppercase tracking-wider rounded-xl hover:opacity-90 disabled:opacity-50 transition-opacity cursor-pointer flex items-center justify-center space-x-1.5"
-                  >
-                    <AlertTriangle className="w-4 h-4" />
-                    <span>Simulate Payment failure</span>
-                  </button>
-                </div>
-
-                {/* Show status replies */}
-                {paymentStatus === "success" && (
-                  <div className="bg-green-600/15 border border-green-600/20 p-3.5 rounded-xl text-green-600 font-poppins text-xs font-semibold">
-                    ✓ Payment Verified. Loading Order Success Page...
-                  </div>
-                )}
-                {paymentStatus === "failed" && (
-                  <div className="bg-red-500/10 border border-red-500/20 p-3.5 rounded-xl text-red-500 font-poppins text-xs font-semibold space-y-1">
-                    <p className="font-bold">❌ UPI Transmission Rejected.</p>
-                    <p className="text-[10px] font-inter opacity-80">Check your internet or bank server parameters and try scanning again.</p>
-                  </div>
-                )}
-              </div>
-            )}
+            {/* Online payments removed — only COD is supported */}
 
             {/* Billing totals snapshot card */}
             <div className="bg-white/40 dark:bg-white/5 border border-black/5 dark:border-white/5 p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-4 shadow-sm select-none">
