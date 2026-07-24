@@ -480,10 +480,8 @@ export default function CheckoutPage() {
             </form>
           </div>
 
-          {/* Checkout Right Side: QR generation visual or checkout summary */}
+          {/* Checkout Right Side: checkout summary */}
           <div className="lg:col-span-5 space-y-6">
-            {/* Online payments removed — only COD is supported */}
-
             {/* Billing totals snapshot card */}
             <div className="bg-white/40 dark:bg-white/5 border border-black/5 dark:border-white/5 p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-4 shadow-sm select-none">
               <h4 className="font-playfair text-lg font-bold text-textCustom dark:text-white">
@@ -512,7 +510,6 @@ export default function CheckoutPage() {
                 </div>
               </div>
             </div>
-
           </div>
 
         </div>
