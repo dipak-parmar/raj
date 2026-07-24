@@ -184,7 +184,7 @@ export default function CheckoutPage() {
           amount: grandTotalWithShipping,
           deliveryCharge,
           subtotal: orderTotal,
-          paymentMethod: paymentMethod === "cod" ? "Cash On Delivery" : "UPI QR Payment",
+          paymentMethod: "Cash On Delivery",
           status: "pending",
           date: new Date().toLocaleString(),
           items: cart.map(item => ({
