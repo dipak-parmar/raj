@@ -159,60 +159,59 @@ export default function CheckoutPage() {
     });
   };
 
-  const executeSuccessSimulation = () => {
+  const executeSuccessSimulation = async () => {
     setPaymentProcessing(true);
-    setTimeout(() => {
-      setPaymentProcessing(false);
-      setPaymentStatus("success");
-      
-      // Fire confetti celebrate
-      confetti({
-        particleCount: 150,
-        spread: 80,
-        origin: { y: 0.6 }
+    
+    // Create receipt
+    const receipt = {
+      orderId,
+      name: formData.name,
+      email: formData.email,
+      mobile: formData.mobile,
+      address: `${formData.address}, ${formData.city}, ${formData.state} - ${formData.pinCode} (Distance: ${distance} km)`,
+      amount: grandTotalWithShipping,
+      deliveryCharge,
+      subtotal: orderTotal,
+      paymentMethod: "Cash On Delivery",
+      status: "pending",
+      date: new Date().toLocaleString(),
+      items: cart.map(item => ({
+        id: item.product.id,
+        name: item.product.name,
+        quantity: item.quantity,
+        price: item.product.offerPrice,
+        subtotal: item.product.offerPrice * item.quantity
+      }))
+    };
+
+    try {
+      // Send to real database via API
+      await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(receipt)
       });
+    } catch (error) {
+      console.error("Failed to save order to db:", error);
+    }
 
-      // Clear bag and redirect to success page after brief delay
-      setTimeout(() => {
-        // Save order details to localStorage for success page
-        const receipt = {
-          orderId,
-          name: formData.name,
-          email: formData.email,
-          mobile: formData.mobile,
-          address: `${formData.address}, ${formData.city}, ${formData.state} - ${formData.pinCode} (Distance: ${distance} km)`,
-          amount: grandTotalWithShipping,
-          deliveryCharge,
-          subtotal: orderTotal,
-          paymentMethod: "Cash On Delivery",
-          status: "pending",
-          date: new Date().toLocaleString(),
-          items: cart.map(item => ({
-            id: item.product.id,
-            name: item.product.name,
-            quantity: item.quantity,
-            price: item.product.offerPrice,
-            subtotal: item.product.offerPrice * item.quantity
-          }))
-        };
-        localStorage.setItem("raj_latest_order", JSON.stringify(receipt));
+    // Keep the latest order in local storage just for the success page to display it
+    localStorage.setItem("raj_latest_order", JSON.stringify(receipt));
 
-        // Save order to the master orders list in localStorage
-        const existingOrdersStr = localStorage.getItem("raj_all_orders");
-        let allOrders = [];
-        if (existingOrdersStr) {
-          try {
-            allOrders = JSON.parse(existingOrdersStr);
-          } catch (e) {
-            console.error(e);
-          }
-        }
-        allOrders.unshift(receipt);
-        localStorage.setItem("raj_all_orders", JSON.stringify(allOrders));
-        
-        clearCart();
-        router.push("/order-success");
-      }, 1500);
+    setPaymentProcessing(false);
+    setPaymentStatus("success");
+    
+    // Fire confetti celebrate
+    confetti({
+      particleCount: 150,
+      spread: 80,
+      origin: { y: 0.6 }
+    });
+
+    // Clear bag and redirect to success page after brief delay
+    setTimeout(() => {
+      clearCart();
+      router.push("/order-success");
     }, 1500);
   };
 

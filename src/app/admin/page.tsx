@@ -48,27 +48,31 @@ export default function AdminDashboard() {
   const [selectedInquiry, setSelectedInquiry] = useState<any | null>(null);
   const [emailModalOrder, setEmailModalOrder] = useState<Order | null>(null);
 
-  // Load orders and inquiries from master list in localStorage
-  useEffect(() => {
-    const savedOrders = localStorage.getItem("raj_all_orders");
-    if (savedOrders) {
-      try {
-        setOrders(JSON.parse(savedOrders));
-      } catch (err) {
-        console.error(err);
+  // Load orders and inquiries from API
+  const fetchOrdersAndInquiries = async () => {
+    try {
+      const ordersRes = await fetch('/api/orders');
+      if (ordersRes.ok) {
+        setOrders(await ordersRes.json());
       }
+      
+      const inquiriesRes = await fetch('/api/inquiries');
+      if (inquiriesRes.ok) {
+        setInquiries(await inquiriesRes.json());
+      }
+    } catch (err) {
+      console.error(err);
     }
-    const savedInquiries = localStorage.getItem("raj_all_inquiries");
-    if (savedInquiries) {
-      try {
-        setInquiries(JSON.parse(savedInquiries));
-      } catch (err) {
-        console.error(err);
-      }
-    } 
+  };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchOrdersAndInquiries();
+      // Optional: Polling could be added here
+    }
   }, [isAuthenticated, activeTab]);
 
-    const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (password.trim() === "dipak2466" || password.trim() === "admin") {
       setIsAuthenticated(true);
@@ -78,19 +82,30 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleConfirmOrder = (orderId: string) => {
+  const handleConfirmOrder = async (orderId: string) => {
+    const orderToConfirm = orders.find(o => o.orderId === orderId);
+    if (!orderToConfirm) return;
+    
+    // Optimistic update
     const updated = orders.map((o) => {
       if (o.orderId === orderId) {
         const confirmedOrder = { ...o, status: "confirmed" as const };
-        // Trigger the Email notification preview popup
         setEmailModalOrder(confirmedOrder);
         return confirmedOrder;
       }
       return o;
     });
-
     setOrders(updated);
-    localStorage.setItem("raj_all_orders", JSON.stringify(updated));
+
+    try {
+      await fetch('/api/orders', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId, status: 'confirmed' })
+      });
+    } catch (err) {
+      console.error("Failed to update order status", err);
+    }
 
     // Blow victory confetti
     confetti({
@@ -100,21 +115,29 @@ export default function AdminDashboard() {
     });
   };
 
-  const handleDeleteOrder = (orderId: string) => {
+  const handleDeleteOrder = async (orderId: string) => {
     if (confirm("Are you sure you want to delete this order record?")) {
-      const updated = orders.filter((o) => o.orderId !== orderId);
-      setOrders(updated);
-      localStorage.setItem("raj_all_orders", JSON.stringify(updated));
+      setOrders(orders.filter((o) => o.orderId !== orderId));
       if (selectedOrder?.orderId === orderId) setSelectedOrder(null);
+      
+      try {
+        await fetch(`/api/orders?orderId=${orderId}`, { method: 'DELETE' });
+      } catch (err) {
+        console.error("Failed to delete order", err);
+      }
     }
   };
 
-  const handleDeleteInquiry = (inquiryId: string) => {
+  const handleDeleteInquiry = async (inquiryId: string) => {
     if (confirm("Are you sure you want to delete this message record?")) {
-      const updated = inquiries.filter((i) => i.id !== inquiryId);
-      setInquiries(updated);
-      localStorage.setItem("raj_all_inquiries", JSON.stringify(updated));
+      setInquiries(inquiries.filter((i) => i.id !== inquiryId));
       if (selectedInquiry?.id === inquiryId) setSelectedInquiry(null);
+      
+      try {
+        await fetch(`/api/inquiries?inquiryId=${inquiryId}`, { method: 'DELETE' });
+      } catch (err) {
+        console.error("Failed to delete inquiry", err);
+      }
     }
   };
 

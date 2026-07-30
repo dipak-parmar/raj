@@ -20,26 +20,25 @@ export default function ContactPage() {
     });
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormSubmitted(true);
 
-    const savedInquiries = localStorage.getItem("raj_all_inquiries");
-    let allInquiries = [];
-    if (savedInquiries) {
-      try {
-        allInquiries = JSON.parse(savedInquiries);
-      } catch (err) {
-        console.error(err);
-      }
-    }
     const newInquiry = {
       ...formData,
       id: `INQ-${Math.floor(100000 + Math.random() * 900000)}`,
       date: new Date().toLocaleString()
     };
-    allInquiries.unshift(newInquiry);
-    localStorage.setItem("raj_all_inquiries", JSON.stringify(allInquiries));
+
+    try {
+      await fetch('/api/inquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newInquiry)
+      });
+    } catch (err) {
+      console.error("Failed to save inquiry:", err);
+    }
 
     setTimeout(() => {
       setFormSubmitted(false);
