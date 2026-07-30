@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server';
-import { kv } from '@vercel/kv';
+import redis from '@/lib/redis';
 
 export async function GET() {
   try {
-    const orders = await kv.get('raj_all_orders') || [];
+    const ordersString = await redis.get('raj_all_orders');
+    const orders = ordersString ? JSON.parse(ordersString) : [];
     return NextResponse.json(orders);
   } catch (error) {
     console.error('Error fetching orders:', error);
@@ -13,10 +14,30 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const newOrder = await request.json();
-    const currentOrders: any[] = (await kv.get('raj_all_orders')) || [];
+    const body = await request.json();
+    
+    // Validate required fields
+    if (!body.name || !body.mobile || !body.amount || !body.address) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    // Generate unique Order ID
+    const orderId = `RAJ-${Math.floor(100000 + Math.random() * 900000)}`;
+
+    const newOrder = {
+      ...body,
+      orderId,
+      status: 'pending',
+      date: new Date().toLocaleString(),
+    };
+
+    const existingOrdersStr = await redis.get('raj_all_orders');
+    const currentOrders: any[] = existingOrdersStr ? JSON.parse(existingOrdersStr) : [];
+    
     currentOrders.unshift(newOrder); // Add to beginning
-    await kv.set('raj_all_orders', currentOrders);
+    
+    await redis.set('raj_all_orders', JSON.stringify(currentOrders));
+    
     return NextResponse.json({ success: true, order: newOrder });
   } catch (error) {
     console.error('Error saving order:', error);
@@ -27,7 +48,8 @@ export async function POST(request: Request) {
 export async function PATCH(request: Request) {
   try {
     const { orderId, status } = await request.json();
-    const currentOrders: any[] = (await kv.get('raj_all_orders')) || [];
+    const existingOrdersStr = await redis.get('raj_all_orders');
+    const currentOrders: any[] = existingOrdersStr ? JSON.parse(existingOrdersStr) : [];
     
     const updatedOrders = currentOrders.map(order => {
       if (order.orderId === orderId) {
@@ -36,7 +58,7 @@ export async function PATCH(request: Request) {
       return order;
     });
 
-    await kv.set('raj_all_orders', updatedOrders);
+    await redis.set('raj_all_orders', JSON.stringify(updatedOrders));
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error updating order:', error);
@@ -53,10 +75,11 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: 'Order ID required' }, { status: 400 });
     }
 
-    const currentOrders: any[] = (await kv.get('raj_all_orders')) || [];
+    const existingOrdersStr = await redis.get('raj_all_orders');
+    const currentOrders: any[] = existingOrdersStr ? JSON.parse(existingOrdersStr) : [];
     const updatedOrders = currentOrders.filter(order => order.orderId !== orderId);
     
-    await kv.set('raj_all_orders', updatedOrders);
+    await redis.set('raj_all_orders', JSON.stringify(updatedOrders));
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error deleting order:', error);

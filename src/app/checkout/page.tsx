@@ -159,7 +159,12 @@ export default function CheckoutPage() {
     });
   };
 
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successOrderId, setSuccessOrderId] = useState("");
+
   const executeSuccessSimulation = async () => {
+    if (paymentProcessing || showSuccessModal) return; // Prevent duplicate submissions
+
     setPaymentProcessing(true);
     
     // Create receipt
@@ -186,36 +191,37 @@ export default function CheckoutPage() {
 
     try {
       // Send to real database via API
-      await fetch('/api/orders', {
+      const res = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(receipt)
       });
+      
+      if (res.ok) {
+        const data = await res.json();
+        setSuccessOrderId(data.order.orderId);
+        
+        // Show success modal
+        setShowSuccessModal(true);
+        setPaymentStatus("success");
+        clearCart();
+        
+        // Fire confetti celebrate
+        confetti({
+          particleCount: 150,
+          spread: 80,
+          origin: { y: 0.6 }
+        });
+      } else {
+        alert("Failed to submit order. Please try again.");
+      }
     } catch (error) {
       console.error("Failed to save order to db:", error);
+      alert("Error submitting order.");
+    } finally {
+      setPaymentProcessing(false);
     }
-
-    // Keep the latest order in local storage just for the success page to display it
-    localStorage.setItem("raj_latest_order", JSON.stringify(receipt));
-
-    setPaymentProcessing(false);
-    setPaymentStatus("success");
-    
-    // Fire confetti celebrate
-    confetti({
-      particleCount: 150,
-      spread: 80,
-      origin: { y: 0.6 }
-    });
-
-    // Clear bag and redirect to success page after brief delay
-    setTimeout(() => {
-      clearCart();
-      router.push("/order-success");
-    }, 1500);
   };
-
-  // Removed online failure simulation (no online payments)
 
   const handleSubmitOrder = (e: React.FormEvent) => {
     e.preventDefault();
@@ -510,9 +516,44 @@ export default function CheckoutPage() {
               </div>
             </div>
           </div>
-
         </div>
       </div>
+
+      {/* Success Modal Popup */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-white dark:bg-black/90 border border-black/10 dark:border-white/10 rounded-3xl p-8 max-w-md w-full text-center space-y-6 shadow-2xl transform scale-100 animate-in zoom-in duration-300">
+            <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 text-green-500 rounded-full flex items-center justify-center mx-auto mb-2">
+              <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            
+            <div>
+              <h2 className="text-2xl font-playfair font-bold text-primary dark:text-white mb-2">Order Confirmed!</h2>
+              <p className="text-xs font-inter text-textCustom/60 dark:text-lightMint/60">
+                Thank you for shopping with us. Your order has been successfully placed.
+              </p>
+            </div>
+
+            <div className="bg-black/5 dark:bg-white/5 p-4 rounded-xl border border-black/5 dark:border-white/10">
+              <p className="text-[10px] uppercase font-bold tracking-wider text-textCustom/50 dark:text-lightMint/50 mb-1">
+                Your Order ID
+              </p>
+              <p className="text-xl font-mono font-bold text-primary dark:text-accent">
+                {successOrderId}
+              </p>
+            </div>
+
+            <button
+              onClick={() => router.push("/")}
+              className="w-full py-3.5 bg-primary dark:bg-accent text-white dark:text-primary font-poppins text-xs font-bold uppercase tracking-widest rounded-xl hover:opacity-90 transition-all cursor-pointer"
+            >
+              Continue Shopping
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
