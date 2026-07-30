@@ -199,7 +199,8 @@ export default function CheckoutPage() {
       
       if (res.ok) {
         const data = await res.json();
-        setSuccessOrderId(data.order.orderId);
+        const finalOrderId = data?.order?.orderId || orderId;
+        setSuccessOrderId(finalOrderId);
         
         // Show success modal
         setShowSuccessModal(true);
@@ -212,6 +213,12 @@ export default function CheckoutPage() {
           spread: 80,
           origin: { y: 0.6 }
         });
+
+        // Open WhatsApp with pre-filled order details
+        const whatsappNumber = "919924750849";
+        const message = `Hello Raj Marketing, I have placed a new COD order.\n\n*Order ID:* ${finalOrderId}\n*Name:* ${formData.name}\n*Mobile:* ${formData.mobile}\n*Email:* ${formData.email}\n*Address:* ${formData.address}, ${formData.city}, ${formData.state} - ${formData.pinCode}\n*Total Amount:* ₹${grandTotalWithShipping}\n\n*Items:*\n${cart.map(item => `- ${item.product.name} (x${item.quantity})`).join('\n')}\n\nPlease confirm my order.`;
+        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
       } else {
         alert("Failed to submit order. Please try again.");
       }
